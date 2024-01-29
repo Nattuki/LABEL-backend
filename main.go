@@ -34,7 +34,7 @@ func main() {
 		ParseTime:            true,
 		Collation:            "utf8mb4_unicode_ci",
 		Loc:                  jst,
-		AllowNativePasswords: false,
+		AllowNativePasswords: true,
 	}
 
 	// データベースに接続
