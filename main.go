@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/srinathgs/mysqlstore"
@@ -20,11 +19,6 @@ func init() {
 }
 
 func main() {
-	// .envファイルから環境変数を読み込み
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	// データーベースの設定
 	jst, err := time.LoadLocation("Asia/Tokyo")
