@@ -77,11 +77,11 @@ func HandleLogin(c echo.Context) error {
 
 func HandleCallback(c echo.Context) error {
 	sess, err := session.Get("session", c)
-	u := c.Request().URL
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
+	u := c.Request().URL
 
 	if u.Query().Get("state") != sess.Values["state"] {
 		return c.String(http.StatusInternalServerError, "Invalid state.")
@@ -93,6 +93,10 @@ func HandleCallback(c echo.Context) error {
 	sess.Save(c.Request(), c.Response())
 
 	code := u.Query().Get("code")
+
+	log.Println(code)
+	log.Println(codeVerifier)
+
 	q := url.Values{}
 	q.Add("grant_type", "authorization_code")
 	q.Add("client_id", ClientID)
