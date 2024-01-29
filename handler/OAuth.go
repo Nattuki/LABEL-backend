@@ -105,6 +105,7 @@ func HandleCallback(c echo.Context) error {
 	req.Header.Add("Contne-Type", "application/x-www-form-urlencoded")
 
 	resp, err := http.DefaultClient.Do(req)
+	log.Println(resp)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Failed to get the response from the authorization server.")
 	}
