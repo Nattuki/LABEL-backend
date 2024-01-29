@@ -106,7 +106,7 @@ func HandleCallback(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Failed to write into the new request.")
 	}
-	req.Header.Add("Contne-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := http.DefaultClient.Do(req)
 	log.Println(resp)
