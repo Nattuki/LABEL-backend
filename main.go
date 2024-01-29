@@ -11,10 +11,13 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/session"
-	"github.com/labstack/echo/middleware"
 	"github.com/labstack/echo/v4"
 	"github.com/srinathgs/mysqlstore"
 )
+
+func init() {
+	handler.ClientID = os.Getenv("TRAQ_CLIENT_ID")
+}
 
 func main() {
 	// .envファイルから環境変数を読み込み
@@ -57,16 +60,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dbHandler := handler.NewHandler(db)
-
 	// Echoの新しいインスタンスを作成
 	e := echo.New()
-	e.Use(middleware.Logger())
 	e.Use(session.Middleware(store))
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello!\n")
 	})
+	e.GET("/login", handler.HandleLogin)
+	e.GET("/callback", handler.HandleCallback)
 
 	err = e.Start(":8080")
 	if err != nil {
