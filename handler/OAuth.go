@@ -119,7 +119,7 @@ func HandleCallback(c echo.Context) error {
 	sess.Values["access_token"] = token.AccessToken
 	sess.Save(c.Request(), c.Response())
 
-	return c.String(http.StatusCreated, "Success!")
+	return c.String(http.StatusCreated, token.AccessToken)
 }
 
 func RandomString(length int) (string, error) {
