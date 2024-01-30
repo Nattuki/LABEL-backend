@@ -36,7 +36,7 @@ var (
 )
 
 func HandleLogin(c echo.Context) error {
-	sess, err := session.Get("session", c)
+	sess, err := session.Get("LABEL_session", c)
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
@@ -76,7 +76,7 @@ func HandleLogin(c echo.Context) error {
 }
 
 func HandleCallback(c echo.Context) error {
-	sess, err := session.Get("session", c)
+	sess, err := session.Get("LABEL_session", c)
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
@@ -125,7 +125,7 @@ func HandleCallback(c echo.Context) error {
 	sess.Save(c.Request(), c.Response())
 
 	log.Println(sess.Values)
-	return c.String(http.StatusCreated, "Success!")
+	return c.Redirect(http.StatusFound, "http://localhost:3000/")
 }
 
 func RandomString(length int) (string, error) {
