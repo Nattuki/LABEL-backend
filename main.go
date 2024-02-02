@@ -1,7 +1,7 @@
 package main
 
 import (
-	"LABEL-backend/handler"
+	handler "LABEL-backend/handler"
 	"log"
 	"net/http"
 	"os"
@@ -62,8 +62,12 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello!\n")
 	})
-	e.GET("/login", handler.HandleLogin)
-	e.GET("/callback", handler.HandleCallback)
+
+	withAuth := e.Group("")
+	withAuth.Use(handler.UserAuthMiddleware)
+	withAuth.GET("/me", handler.GetMeHandler)
+	withAuth.GET("/login", handler.HandleLogin)
+	withAuth.GET("/callback", handler.HandleCallback)
 
 	err = e.Start(":8080")
 	if err != nil {
