@@ -10,7 +10,7 @@ type Me struct {
 	Username string `json:"username,omitempty"  db:"username"`
 }
 
-func GetMeHandler(c echo.Context) error {
+func HandleGetMe(c echo.Context) error {
 	return c.JSON(http.StatusOK, Me{
 		Username: c.Get("userName").(string),
 	})

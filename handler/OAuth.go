@@ -122,6 +122,11 @@ func HandleCallback(c echo.Context) error {
 	var token TokenResponse
 	json.Unmarshal(body, &token)
 	sess.Values["access_token"] = token.AccessToken
+	sess.Values["token_type"] = token.TokenType
+	sess.Values["expires_in"] = token.ExpiresIn
+	sess.Values["refresh_token"] = token.RefreshToken
+	sess.Values["scope"] = token.Scope
+	sess.Values["id_token"] = token.IDToken
 	sess.Save(c.Request(), c.Response())
 
 	log.Println(sess.Values)
