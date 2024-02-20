@@ -131,7 +131,7 @@ func HandleCallback(c echo.Context) error {
 	sess.Values["id_token"] = token.IDToken
 	sess.Save(c.Request(), c.Response())
 
-	log.Println(userIcon)
+	log.Println("Start" + userIcon)
 	return c.Redirect(http.StatusFound, "http://localhost:3000/")
 }
 
