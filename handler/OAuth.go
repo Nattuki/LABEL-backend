@@ -131,7 +131,7 @@ func HandleCallback(c echo.Context) error {
 	sess.Values["id_token"] = token.IDToken
 	sess.Save(c.Request(), c.Response())
 
-	log.Println("Start" + userIcon)
+	log.Println(userIcon)
 	return c.Redirect(http.StatusFound, "http://localhost:3000/")
 }
 
@@ -150,21 +150,21 @@ func RandomString(length int) (string, error) {
 	return s.String()[:length], nil
 }
 
-func GetIcon(accessToken string) (string, error) {
+func GetIcon(accessToken string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, "https://q.trap.jp/api/v3/users/me/icon", nil)
 	if err != nil {
-		return "", fmt.Errorf("failed to get a new request to get the icon")
+		return []byte(""), fmt.Errorf("failed to get a new request to get the icon")
 	}
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("failed to send the request to get the icon")
+		return []byte(""), fmt.Errorf("failed to send the request to get the icon")
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to get the response body to get the icon")
+		return []byte(""), fmt.Errorf("failed to get the response body to get the icon")
 	}
-	icon := string(body[:])
-	return icon, nil
+
+	return body, nil
 }
