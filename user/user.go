@@ -33,3 +33,26 @@ func GetName(AccessToken string) string {
 
 	return userInformation.UserId
 }
+
+func GetIcon(AccessToken string) string {
+	req, err := http.NewRequest(http.MethodGet, "https://q.trap.jp/api/v3/users/me/icon", nil)
+	if err != nil {
+		log.Println(err)
+	}
+	req.Header.Add("Authorization", "Bearer"+AccessToken)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	var IconBase64 string
+	json.Unmarshal(body, &IconBase64)
+
+	return IconBase64
+}
