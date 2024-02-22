@@ -10,7 +10,7 @@ import (
 
 func UserAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		sess, err := session.Get("sessions", c)
+		sess, err := session.Get("LABEL_session", c)
 		if err != nil {
 			log.Println(err)
 			return c.String(http.StatusInternalServerError, "Failed to get the session.")
