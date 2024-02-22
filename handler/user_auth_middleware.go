@@ -21,6 +21,7 @@ func UserAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		} else {
 			c.Set("userName", sess.Values["userName"].(string))
 		}
+		log.Println(sess.Values)
 
 		return next(c)
 	}
