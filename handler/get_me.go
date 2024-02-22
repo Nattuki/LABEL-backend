@@ -21,6 +21,7 @@ func HandleGetMe(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
 	accessToken := sess.Values["access_token"]
+	log.Println(accessToken)
 	return c.JSON(http.StatusOK, Me{
 		myName:       user.GetName(accessToken.(string)),
 		myIconBase64: user.GetIcon(accessToken.(string)),
