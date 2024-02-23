@@ -16,7 +16,7 @@ func GetName(AccessToken string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	req.Header.Add("Authorization", "Bearer"+AccessToken)
+	req.Header.Add("Authorization", "Bearer "+AccessToken)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -39,7 +39,7 @@ func GetIcon(AccessToken string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	req.Header.Add("Authorization", "Bearer"+AccessToken)
+	req.Header.Add("Authorization", "Bearer "+AccessToken)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
