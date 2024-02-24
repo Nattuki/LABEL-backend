@@ -8,10 +8,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type Me struct {
+/*type Me struct {
 	myName       string
 	myIconBase64 string
-}
+}*/
 
 func HandleGetMe(c echo.Context) error {
 	sess, err := session.Get("LABEL_session", c)
@@ -20,7 +20,8 @@ func HandleGetMe(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
 	accessToken := sess.Values["access_token"]
-	log.Println("start" + accessToken.(string))
+	log.Println("start")
+	log.Println(accessToken)
 	/*return c.JSON(http.StatusOK, Me{
 		myName:       user.GetName(accessToken.(string)),
 		myIconBase64: user.GetIcon(accessToken.(string)),
