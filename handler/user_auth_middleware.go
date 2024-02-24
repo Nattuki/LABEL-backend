@@ -15,12 +15,6 @@ func UserAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			log.Println(err)
 			return c.String(http.StatusInternalServerError, "Failed to get the session.")
 		}
-
-		if sess.Values["userName"] == nil {
-			c.Set("userName", "visitor")
-		} else {
-			c.Set("userName", sess.Values["userName"].(string))
-		}
 		log.Println(sess.Values)
 
 		return next(c)

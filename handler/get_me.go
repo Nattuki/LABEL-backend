@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"LABEL-backend/user"
 	"log"
 	"net/http"
 
@@ -22,8 +21,9 @@ func HandleGetMe(c echo.Context) error {
 	}
 	accessToken := sess.Values["access_token"]
 	log.Println("start" + accessToken.(string))
-	return c.JSON(http.StatusOK, Me{
+	/*return c.JSON(http.StatusOK, Me{
 		myName:       user.GetName(accessToken.(string)),
 		myIconBase64: user.GetIcon(accessToken.(string)),
-	})
+	})*/
+	return c.JSON(http.StatusOK, "ok!")
 }
