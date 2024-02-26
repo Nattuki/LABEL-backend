@@ -72,7 +72,7 @@ func HandleGetOAuthUrl(c echo.Context) error {
 	q.Add("code_challenge", codeChallenge)
 	q.Add("code_challenge_method", "S256")
 	u.RawQuery = q.Encode()
-	return c.String(http.StatusOK, u.RequestURI())
+	return c.String(http.StatusOK, u.String())
 }
 
 func HandleCallback(c echo.Context) error {
