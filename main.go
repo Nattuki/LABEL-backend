@@ -66,7 +66,7 @@ func main() {
 	withAuth := e.Group("")
 	withAuth.Use(handler.UserAuthMiddleware)
 	withAuth.GET("/me", handler.HandleGetMe)
-	withAuth.GET("/login", handler.HandleLogin)
+	withAuth.GET("/loginpath", handler.HandleGetOAuthUrl)
 	withAuth.GET("/callback", handler.HandleCallback)
 
 	err = e.Start(":8080")

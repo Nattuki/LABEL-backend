@@ -35,7 +35,7 @@ var (
 	ClientID string
 )
 
-func HandleLogin(c echo.Context) error {
+func HandleGetOAuthUrl(c echo.Context) error {
 	sess, err := session.Get("LABEL_session", c)
 	if err != nil {
 		log.Println(err)
@@ -72,7 +72,7 @@ func HandleLogin(c echo.Context) error {
 	q.Add("code_challenge", codeChallenge)
 	q.Add("code_challenge_method", "S256")
 	u.RawQuery = q.Encode()
-	return c.Redirect(http.StatusFound, u.String())
+	return c.String(http.StatusOK, u.RawQuery)
 }
 
 func HandleCallback(c echo.Context) error {
