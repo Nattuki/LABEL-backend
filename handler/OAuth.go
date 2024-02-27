@@ -72,6 +72,10 @@ func HandleGetOAuthUrl(c echo.Context) error {
 	q.Add("code_challenge", codeChallenge)
 	q.Add("code_challenge_method", "S256")
 	u.RawQuery = q.Encode()
+
+	log.Println("GetOAuthHandler:")
+	log.Println(sess.Values)
+
 	return c.String(http.StatusOK, u.String())
 }
 
@@ -128,6 +132,10 @@ func HandleGetToken(c echo.Context) error {
 	sess.Values["scope"] = token.Scope
 	sess.Values["id_token"] = token.IDToken
 	sess.Save(c.Request(), c.Response())
+
+	log.Println("GetTokenHandler:")
+	log.Println(sess.Values)
+
 	return c.String(http.StatusFound, "success")
 }
 

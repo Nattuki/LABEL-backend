@@ -63,11 +63,10 @@ func main() {
 		return c.String(http.StatusOK, "Hello!\n")
 	})
 
-	withAuth := e.Group("")
-	withAuth.Use(handler.UserAuthMiddleware)
-	withAuth.GET("/me", handler.HandleGetMe)
-	withAuth.GET("/loginpath", handler.HandleGetOAuthUrl)
-	withAuth.GET("/gettoken", handler.HandleGetToken)
+	e.Use(handler.UserAuthMiddleware)
+	e.GET("/me", handler.HandleGetMe)
+	e.GET("/loginpath", handler.HandleGetOAuthUrl)
+	e.GET("/gettoken", handler.HandleGetToken)
 
 	err = e.Start(":8080")
 	if err != nil {
