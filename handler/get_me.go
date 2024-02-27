@@ -23,8 +23,9 @@ func HandleGetMe(c echo.Context) error {
 	accessToken := sess.Values["access_token"]
 	log.Println("start")
 	log.Println(accessToken)
-	return c.JSON(http.StatusOK, Me{
-		myName:       user.GetName(accessToken.(string)),
-		myIconBase64: user.GetIcon(accessToken.(string)),
-	})
+	var me Me
+	me.myName = user.GetName(accessToken.(string))
+	me.myIconBase64 = user.GetIcon(accessToken.(string))
+	log.Println(me)
+	return c.JSON(http.StatusOK, me)
 }
