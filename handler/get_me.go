@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"LABEL-backend/user"
 	"log"
 	"net/http"
 
@@ -8,10 +9,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-/*type Me struct {
+type Me struct {
 	myName       string
 	myIconBase64 string
-}*/
+}
 
 func HandleGetMe(c echo.Context) error {
 	sess, err := session.Get("LABEL_session", c)
@@ -22,9 +23,8 @@ func HandleGetMe(c echo.Context) error {
 	accessToken := sess.Values["access_token"]
 	log.Println("start")
 	log.Println(accessToken)
-	/*return c.JSON(http.StatusOK, Me{
+	return c.JSON(http.StatusOK, Me{
 		myName:       user.GetName(accessToken.(string)),
 		myIconBase64: user.GetIcon(accessToken.(string)),
-	})*/
-	return c.JSON(http.StatusOK, "ok!")
+	})
 }
