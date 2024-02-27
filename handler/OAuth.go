@@ -75,7 +75,7 @@ func HandleGetOAuthUrl(c echo.Context) error {
 	return c.String(http.StatusOK, u.String())
 }
 
-func HandleCallback(c echo.Context) error {
+func HandleGetToken(c echo.Context) error {
 	sess, err := session.Get("LABEL_session", c)
 	if err != nil {
 		log.Println(err)
@@ -128,7 +128,7 @@ func HandleCallback(c echo.Context) error {
 	sess.Values["scope"] = token.Scope
 	sess.Values["id_token"] = token.IDToken
 	sess.Save(c.Request(), c.Response())
-	return c.Redirect(http.StatusFound, "http://localhost:3000/")
+	return c.String(http.StatusFound, "success")
 }
 
 func RandomString(length int) (string, error) {
