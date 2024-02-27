@@ -136,7 +136,7 @@ func HandleGetToken(c echo.Context) error {
 	log.Println("GetTokenHandler:")
 	log.Println(sess.Values)
 
-	return c.String(http.StatusFound, "success")
+	return c.String(http.StatusAccepted, "success")
 }
 
 func RandomString(length int) (string, error) {

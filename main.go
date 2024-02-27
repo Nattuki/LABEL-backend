@@ -63,7 +63,6 @@ func main() {
 		return c.String(http.StatusOK, "Hello!\n")
 	})
 
-	e.Use(handler.UserAuthMiddleware)
 	e.GET("/me", handler.HandleGetMe)
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)
