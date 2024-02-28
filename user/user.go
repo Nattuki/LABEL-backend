@@ -1,6 +1,7 @@
 package user
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"log"
@@ -52,5 +53,8 @@ func GetIcon(AccessToken string) string {
 		log.Println(err)
 	}
 
-	return string(body)
+	base64Data := base64.StdEncoding.EncodeToString(body)
+	log.Println("base64data:")
+	log.Println(base64Data)
+	return base64Data
 }
