@@ -28,5 +28,5 @@ func HandleGetMe(c echo.Context) error {
 	me.myIconBase64 = user.GetIcon(accessToken.(string))
 	log.Println(me.myName)
 	log.Println(me.myIconBase64)
-	return c.JSON(http.StatusOK, me)
+	return c.String(http.StatusOK, me.myIconBase64)
 }

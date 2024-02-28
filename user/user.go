@@ -51,7 +51,6 @@ func GetIcon(AccessToken string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println(body)
 
 	return string(body)
 }
