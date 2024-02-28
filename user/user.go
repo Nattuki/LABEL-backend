@@ -51,8 +51,7 @@ func GetIcon(AccessToken string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	var IconBase64 string
-	json.Unmarshal(body, &IconBase64)
+	log.Println(body)
 
-	return IconBase64
+	return string(body)
 }
