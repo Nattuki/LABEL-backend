@@ -122,6 +122,7 @@ func HandleGetToken(c echo.Context) error {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "Failed to get the token.")
 	}
+	log.Println(token.AccessToken)
 	sess.Values["access_token"] = token.AccessToken
 	sess.Values["token_type"] = token.TokenType
 	sess.Values["expires_in"] = token.ExpiresIn
@@ -140,24 +141,15 @@ func HandleLogout(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
 
-	accessToken := sess.Values["access_token"]
-	req, err := http.NewRequest(http.MethodDelete, "https://q.trap.jp/api/v3/users/me/tokens/"+accessToken.(string), nil)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, "Failed to get the response from the authorization server.")
-	}
+	sess.Values["access_token"] = ""
+	sess.Values["token_type"] = ""
+	sess.Values["expires_in"] = ""
+	sess.Values["refresh_token"] = ""
+	sess.Values["scope"] = ""
+	sess.Values["id_token"] = ""
+	sess.Save(c.Request(), c.Response())
 
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, "Failed to get the response from the authorization server.")
-	}
-	defer resp.Body.Close()
-
-	log.Println(resp.StatusCode)
-	if resp.StatusCode == 204 {
-		return c.String(http.StatusOK, "logout succeeded")
-	} else {
-		return c.String(http.StatusInternalServerError, "logout failed")
-	}
+	return c.String(http.StatusOK, "logout succeeded")
 }
 
 func RandomString(length int) (string, error) {
