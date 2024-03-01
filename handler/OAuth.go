@@ -133,6 +133,33 @@ func HandleGetToken(c echo.Context) error {
 	return c.String(http.StatusAccepted, "success")
 }
 
+func HandleLogout(c echo.Context) error {
+	sess, err := session.Get("LABEL_session", c)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "Failed to get the session.")
+	}
+
+	accessToken := sess.Values["access_token"]
+	req, err := http.NewRequest(http.MethodDelete, "https://q.trap.jp/api/v3/users/me/tokens/"+accessToken.(string), nil)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to get the response from the authorization server.")
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to get the response from the authorization server.")
+	}
+	defer resp.Body.Close()
+
+	log.Println(resp.StatusCode)
+	if resp.StatusCode == 204 {
+		return c.String(http.StatusOK, "logout succeeded")
+	} else {
+		return c.String(http.StatusInternalServerError, "logout failed")
+	}
+}
+
 func RandomString(length int) (string, error) {
 	if length < 0 {
 		return "", fmt.Errorf("cannot generate random string of negative length %d", length)
