@@ -66,7 +66,7 @@ func main() {
 	e.GET("/getme", handler.HandleGetMe)
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)
-
+	e.DELETE("/logout", handler.HandleLogout)
 	err = e.Start(":8080")
 	if err != nil {
 		log.Fatal(err)
