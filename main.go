@@ -63,10 +63,9 @@ func main() {
 		return c.String(http.StatusOK, "Hello!\n")
 	})
 
-	e.GET("/me", handler.HandleGetMe)
+	e.GET("/getme", handler.HandleGetMe)
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)
-	e.GET("/getme", handler.HandleGetMe)
 
 	err = e.Start(":8080")
 	if err != nil {
