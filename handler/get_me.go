@@ -13,6 +13,7 @@ type Me struct {
 	MyId         string `json:"MyId"`
 	MyName       string `json:"MyName"`
 	MyIconBase64 string `json:"MyIconBase64"`
+	IsVisitor    bool   `json:"IsVisitor"`
 }
 
 func HandleGetMe(c echo.Context) error {
@@ -21,13 +22,22 @@ func HandleGetMe(c echo.Context) error {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
+
 	accessToken := sess.Values["access_token"]
 
-	me := &Me{
-		MyId:         user.GetId(accessToken.(string)),
-		MyName:       user.GetName(accessToken.(string)),
-		MyIconBase64: user.GetIcon(accessToken.(string)),
+	if user.IsValidToken(accessToken.(string)) {
+		return c.JSON(http.StatusOK, &Me{
+			MyId:         user.GetId(accessToken.(string)),
+			MyName:       user.GetName(accessToken.(string)),
+			MyIconBase64: user.GetIcon(accessToken.(string)),
+			IsVisitor:    false,
+		})
+	} else {
+		return c.JSON(http.StatusOK, &Me{
+			MyId:         "",
+			MyName:       "",
+			MyIconBase64: "",
+			IsVisitor:    true,
+		})
 	}
-
-	return c.JSON(http.StatusOK, me)
 }

@@ -117,10 +117,10 @@ func HandleGetToken(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Failed to read the body.")
 	}
 	var token TokenResponse
-	json.Unmarshal(body, &token)
+	err = json.Unmarshal(body, &token)
 	if err != nil {
 		log.Println(err)
-		return c.String(http.StatusInternalServerError, "Failed to get the icon.")
+		return c.String(http.StatusInternalServerError, "Failed to get the token.")
 	}
 	sess.Values["access_token"] = token.AccessToken
 	sess.Values["token_type"] = token.TokenType

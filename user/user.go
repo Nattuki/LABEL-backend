@@ -67,3 +67,24 @@ func GetIcon(AccessToken string) string {
 	base64Data := base64.StdEncoding.EncodeToString(body)
 	return base64Data
 }
+
+func IsValidToken(AccessToken string) bool {
+	req, err := http.NewRequest(http.MethodGet, "https://q.trap.jp/api/v3/users/me", nil)
+	if err != nil {
+		log.Println(err)
+	}
+	req.Header.Add("Authorization", "Bearer "+AccessToken)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+
+	log.Println(resp.StatusCode)
+	if resp.StatusCode == http.StatusAccepted {
+		return true
+	} else {
+		return false
+	}
+}
