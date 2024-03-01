@@ -10,6 +10,7 @@ import (
 )
 
 type Me struct {
+	myId         string
 	myName       string
 	myIconBase64 string
 }
@@ -21,12 +22,11 @@ func HandleGetMe(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
 	accessToken := sess.Values["access_token"]
-	log.Println("start")
-	log.Println(accessToken)
+
 	var me Me
+	me.myId = user.GetId(accessToken.(string))
 	me.myName = user.GetName(accessToken.(string))
 	me.myIconBase64 = user.GetIcon(accessToken.(string))
-	log.Println(me.myName)
-	log.Println(me.myIconBase64)
-	return c.String(http.StatusOK, me.myIconBase64)
+
+	return c.JSON(http.StatusOK, me)
 }

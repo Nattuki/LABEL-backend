@@ -65,7 +65,5 @@ func GetIcon(AccessToken string) string {
 	}
 
 	base64Data := base64.StdEncoding.EncodeToString(body)
-	log.Println("base64data:")
-	log.Println(base64Data)
 	return base64Data
 }
