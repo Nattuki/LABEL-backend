@@ -10,9 +10,9 @@ import (
 )
 
 type Me struct {
-	myId         string
-	myName       string
-	myIconBase64 string
+	MyId         string `json:"MyId"`
+	MyName       string `json:"MyName"`
+	MyIconBase64 string `json:"MyIconBase64"`
 }
 
 func HandleGetMe(c echo.Context) error {
@@ -23,10 +23,11 @@ func HandleGetMe(c echo.Context) error {
 	}
 	accessToken := sess.Values["access_token"]
 
-	var me Me
-	me.myId = user.GetId(accessToken.(string))
-	me.myName = user.GetName(accessToken.(string))
-	me.myIconBase64 = user.GetIcon(accessToken.(string))
+	me := &Me{
+		MyId:         user.GetId(accessToken.(string)),
+		MyName:       user.GetName(accessToken.(string)),
+		MyIconBase64: user.GetIcon(accessToken.(string)),
+	}
 
 	return c.JSON(http.StatusOK, me)
 }
