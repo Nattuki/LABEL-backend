@@ -82,7 +82,7 @@ func IsValidToken(AccessToken string) bool {
 	defer resp.Body.Close()
 
 	log.Println(resp.StatusCode)
-	if resp.StatusCode == http.StatusAccepted {
+	if resp.StatusCode == 200 {
 		return true
 	} else {
 		return false
