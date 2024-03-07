@@ -4,6 +4,7 @@ import (
 	"LABEL-backend/user"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -11,10 +12,11 @@ import (
 )
 
 type Message struct {
-	MessageId   string `json:"-" db:"message_id"`
-	CreatorName string `json:"-" db:"creator_name"`
-	Title       string `json:"title" db:"title"`
-	Url         string `json:"url" db:"url"`
+	MessageId   string    `json:"-" db:"message_id"`
+	CreatorName string    `json:"-" db:"creator_name"`
+	Title       string    `json:"title" db:"title"`
+	Url         string    `json:"url" db:"url"`
+	CreatedOn   time.Time `json:"-" db:"created_on"`
 }
 
 func (h *dbHandler) HandleMessage(c echo.Context) error {
@@ -31,14 +33,17 @@ func (h *dbHandler) HandleMessage(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Failed to get the session.")
 	}
 	accessToken := sess.Values["access_token"]
+
 	message.CreatorName = user.GetName(accessToken.(string))
 	message.MessageId = xid.New().String()
+	message.CreatedOn = time.Now()
 
 	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, url) VALUES (?, ?, ?, ?)",
 		message.MessageId,
 		message.CreatorName,
 		message.Title,
 		message.Url,
+		message.CreatedOn,
 	)
 	if err != nil {
 		log.Println(err)
