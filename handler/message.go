@@ -34,6 +34,17 @@ func (h *dbHandler) HandleMessage(c echo.Context) error {
 	message.CreatorName = user.GetName(accessToken.(string))
 	message.MessageId = xid.New().String()
 
+	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, url) VALUES (?, ?, ?, ?)",
+		message.MessageId,
+		message.CreatorName,
+		message.Title,
+		message.Url,
+	)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to insert into the database")
+	}
+
 	log.Println(*message)
 	return c.String(http.StatusOK, "OK!")
 }
