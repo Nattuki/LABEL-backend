@@ -38,7 +38,7 @@ func (h *dbHandler) HandleMessage(c echo.Context) error {
 	message.MessageId = xid.New().String()
 	message.CreatedOn = time.Now()
 
-	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, url) VALUES (?, ?, ?, ?, ?)",
+	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, url, created_on) VALUES (?, ?, ?, ?, ?)",
 		message.MessageId,
 		message.CreatorName,
 		message.Title,
