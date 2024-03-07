@@ -7,6 +7,7 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo-contrib v0.15.0
 	github.com/labstack/echo/v4 v4.11.4
+	github.com/rs/xid v1.5.0
 	github.com/srinathgs/mysqlstore v0.0.0-20231123182912-ffbca72c0a70
 )
 

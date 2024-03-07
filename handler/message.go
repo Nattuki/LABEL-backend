@@ -7,15 +7,17 @@ import (
 
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/rs/xid"
 )
 
 type Message struct {
-	Title       string `json:"title"`
-	Url         string `json:"url"`
-	CreatorName string
+	MessageId   string `json:"-" db:"message_id"`
+	CreatorName string `json:"-" db:"creator_name"`
+	Title       string `json:"title" db:"title"`
+	Url         string `json:"url" db:"url"`
 }
 
-func HandleMessage(c echo.Context) error {
+func (h *dbHandler) HandleMessage(c echo.Context) error {
 	message := new(Message)
 	err := c.Bind(message)
 	if err != nil {
@@ -30,6 +32,7 @@ func HandleMessage(c echo.Context) error {
 	}
 	accessToken := sess.Values["access_token"]
 	message.CreatorName = user.GetName(accessToken.(string))
+	message.MessageId = xid.New().String()
 
 	log.Println(*message)
 	return c.String(http.StatusOK, "OK!")
