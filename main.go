@@ -68,6 +68,7 @@ func main() {
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)
 	e.GET("/message/get/:page", h.HandleGetMessage)
+	e.GET("/message/countPages", h.HandleCountPages)
 	e.POST("/message/send", h.HandleSendMessage)
 	e.DELETE("/logout", handler.HandleLogout)
 	err = e.Start(":8080")
