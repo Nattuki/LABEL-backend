@@ -4,6 +4,7 @@ import (
 	"LABEL-backend/user"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo-contrib/session"
@@ -20,7 +21,7 @@ type Message struct {
 	CreatedOn   time.Time `json:"-" db:"created_on"`
 }
 
-func (h *dbHandler) HandleMessage(c echo.Context) error {
+func (h *dbHandler) HandleSendMessage(c echo.Context) error {
 	message := new(Message)
 	err := c.Bind(message)
 	if err != nil {
@@ -54,4 +55,46 @@ func (h *dbHandler) HandleMessage(c echo.Context) error {
 
 	log.Println(*message)
 	return c.String(http.StatusOK, "OK!")
+}
+
+func (h *dbHandler) HandleGetMessage(c echo.Context) error {
+	page, err := strconv.Atoi(c.Param("page"))
+	if err != nil {
+		return c.String(http.StatusNotFound, "invalid path parameter")
+	}
+
+	var message Message
+	var messages []Message
+	var messagesToSend []Message
+
+	rows, err := h.db.Queryx("SELECT * From messages ORDERBY created_on")
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to get messages from the database")
+	}
+
+	for rows.Next() {
+		err := rows.StructScan(&message)
+		if err != nil {
+			log.Println(err)
+			return c.String(http.StatusInternalServerError, "failed to scan the next row")
+		}
+		messages = append(messages, message)
+	}
+
+	messagesSize := len(messages)
+	start := 10 * (page - 1)
+	if start > (messagesSize - 1) {
+		return c.String(http.StatusNotFound, "invalid path parameter")
+	}
+	var end int
+	if 10*page <= messagesSize {
+		end = 10 * page
+	} else {
+		end = messagesSize
+	}
+
+	messagesToSend = messages[start:end]
+
+	return c.JSON(http.StatusOK, messagesToSend)
 }

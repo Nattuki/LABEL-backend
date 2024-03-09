@@ -64,10 +64,11 @@ func main() {
 	})
 	h := handler.NewHandler(db)
 
-	e.GET("/getme", handler.HandleGetMe)
+	e.GET("/me", handler.HandleGetMe)
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)
-	e.POST("/message", h.HandleMessage)
+	e.GET("/message/get/:page", h.HandleGetMessage)
+	e.POST("/message/send", h.HandleSendMessage)
 	e.DELETE("/logout", handler.HandleLogout)
 	err = e.Start(":8080")
 	if err != nil {
