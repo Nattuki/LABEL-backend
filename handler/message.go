@@ -100,10 +100,10 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 }
 
 func (h *dbHandler) HandleCountPages(c echo.Context) error {
-	res := &struct {
+	res := struct {
 		Count int `json:"count"`
 	}{0}
-	err := h.db.Get(res.Count, "SELECT COUNT(message_id) FROM messages")
+	err := h.db.Get(&res.Count, "SELECT COUNT(message_id) FROM messages")
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "failed to connect with the database")
