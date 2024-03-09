@@ -108,5 +108,6 @@ func (h *dbHandler) HandleCountPages(c echo.Context) error {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "failed to connect with the database")
 	}
+	res.Count = res.Count/10 + 1
 	return c.JSON(http.StatusOK, res)
 }
