@@ -67,7 +67,7 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 	var messages []Message
 	var messagesToSend []Message
 
-	rows, err := h.db.Queryx("SELECT * From messages ORDER BY created_on")
+	rows, err := h.db.Queryx("SELECT * From messages ORDER BY created_on DESC")
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "failed to get messages from the database")
