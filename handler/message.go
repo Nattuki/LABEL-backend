@@ -15,6 +15,7 @@ type Message struct {
 	MessageId   string    `json:"-" db:"message_id"`
 	CreatorName string    `json:"-" db:"creator_name"`
 	Title       string    `json:"title" db:"title"`
+	Comment     string    `json:"comment" db:"comment"`
 	Url         string    `json:"url" db:"url"`
 	CreatedOn   time.Time `json:"-" db:"created_on"`
 }
@@ -38,10 +39,11 @@ func (h *dbHandler) HandleMessage(c echo.Context) error {
 	message.MessageId = xid.New().String()
 	message.CreatedOn = time.Now()
 
-	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, url, created_on) VALUES (?, ?, ?, ?, ?)",
+	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, comment, url, created_on) VALUES (?, ?, ?, ?, ?, ?)",
 		message.MessageId,
 		message.CreatorName,
 		message.Title,
+		message.Comment,
 		message.Url,
 		message.CreatedOn,
 	)
