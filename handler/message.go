@@ -13,12 +13,12 @@ import (
 )
 
 type Message struct {
-	MessageId   string    `json:"-" db:"message_id"`
-	CreatorName string    `json:"-" db:"creator_name"`
+	MessageId   string    `json:"messageId" db:"message_id"`
+	CreatorName string    `json:"creatorName" db:"creator_name"`
 	Title       string    `json:"title" db:"title"`
 	Comment     string    `json:"comment" db:"comment"`
 	Url         string    `json:"url" db:"url"`
-	CreatedOn   time.Time `json:"-" db:"created_on"`
+	CreatedOn   time.Time `json:"createdOn" db:"created_on"`
 }
 
 func (h *dbHandler) HandleSendMessage(c echo.Context) error {
@@ -84,7 +84,7 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 
 	messagesSize := len(messages)
 	start := 10 * (page - 1)
-	if start > (messagesSize - 1) {
+	if start > (messagesSize-1) || start < 0 {
 		return c.String(http.StatusNotFound, "invalid path parameter")
 	}
 	var end int
