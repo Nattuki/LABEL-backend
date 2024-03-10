@@ -124,7 +124,7 @@ func (h *dbHandler) HandleDeleteMessage(c echo.Context) error {
 	userName := user.GetName(accessToken.(string))
 
 	var creatorName string
-	err = h.db.Get(&creatorName, "SELECT * FROM messages WHERE message_id = ?", messageId)
+	err = h.db.Get(&creatorName, "SELECT creator_name FROM messages WHERE message_id = ?", messageId)
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "failed to connect with the database")
