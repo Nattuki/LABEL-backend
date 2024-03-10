@@ -111,3 +111,34 @@ func (h *dbHandler) HandleCountPages(c echo.Context) error {
 	res.Count = (res.Count-1)/10 + 1
 	return c.JSON(http.StatusOK, res)
 }
+
+func (h *dbHandler) HandleDeleteMessage(c echo.Context) error {
+	messageId := c.Param("id")
+
+	sess, err := session.Get("LABEL_session", c)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "Failed to get the session.")
+	}
+	accessToken := sess.Values["access_token"]
+	userName := user.GetName(accessToken.(string))
+
+	var creatorName string
+	err = h.db.Get(&creatorName, "SELECT * FROM messages WHERE message_id = ?", messageId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to connect with the database")
+	}
+
+	if creatorName != userName {
+		return c.String(http.StatusUnauthorized, "you are not authorized to delete the message")
+	}
+
+	_, err = h.db.Exec("DELETE FROM messages WHERE message_id = ?", messageId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to delete the message")
+	}
+
+	return c.NoContent(http.StatusOK)
+}
