@@ -133,6 +133,12 @@ func (h *dbHandler) HandleDeleteMessage(c echo.Context) error {
 		return c.String(http.StatusUnauthorized, "you are not authorized to delete the message")
 	}
 
+	_, err = h.db.Exec("DELETE FROM labels WHERE message_id = ?", messageId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to delete the message")
+	}
+
 	_, err = h.db.Exec("DELETE FROM messages WHERE message_id = ?", messageId)
 	if err != nil {
 		log.Println(err)
