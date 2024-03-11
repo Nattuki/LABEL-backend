@@ -73,6 +73,7 @@ func main() {
 	e.POST("/message/send", h.HandleSendMessage)
 	e.POST("/label/send", h.HandleSendLabel)
 	e.DELETE("/message/delete/:id", h.HandleDeleteMessage)
+	e.DELETE("/label/delete/:id", h.HandleDeleteLabel)
 	e.DELETE("/logout", handler.HandleLogout)
 	err = e.Start(":8080")
 	if err != nil {

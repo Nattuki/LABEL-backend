@@ -80,3 +80,34 @@ func (h *dbHandler) HandleGetLabel(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, labels)
 }
+
+func (h *dbHandler) HandleDeleteLabel(c echo.Context) error {
+	labelId := c.Param("id")
+
+	sess, err := session.Get("LABEL_session", c)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "Failed to get the session.")
+	}
+	accessToken := sess.Values["access_token"]
+	userName := user.GetName(accessToken.(string))
+
+	var creatorName string
+	err = h.db.Get(&creatorName, "SELECT creator_name FROM labels WHERE label_id = ?", labelId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to connect with the database")
+	}
+
+	if creatorName != userName {
+		return c.String(http.StatusUnauthorized, "you are not authorized to delete the message")
+	}
+
+	_, err = h.db.Exec("DELETE FROM labels WHERE label_id = ?", labelId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to delete the label")
+	}
+
+	return c.NoContent(http.StatusOK)
+}
