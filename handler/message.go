@@ -37,7 +37,7 @@ func (h *dbHandler) HandleSendMessage(c echo.Context) error {
 	accessToken := sess.Values["access_token"]
 
 	message.CreatorName = user.GetName(accessToken.(string))
-	message.MessageId = xid.New().String()
+	message.MessageId = "msg" + xid.New().String()
 	message.CreatedOn = time.Now()
 
 	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, comment, url, created_on) VALUES (?, ?, ?, ?, ?, ?)",
@@ -53,8 +53,7 @@ func (h *dbHandler) HandleSendMessage(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "failed to insert into the database")
 	}
 
-	log.Println(*message)
-	return c.String(http.StatusOK, "OK!")
+	return c.NoContent(http.StatusOK)
 }
 
 func (h *dbHandler) HandleGetMessage(c echo.Context) error {

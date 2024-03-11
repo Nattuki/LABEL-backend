@@ -70,6 +70,7 @@ func main() {
 	e.GET("/message/get/:page", h.HandleGetMessage)
 	e.GET("/message/countPages", h.HandleCountPages)
 	e.POST("/message/send", h.HandleSendMessage)
+	e.POST("/label/send", h.HandleSendLabel)
 	e.DELETE("/message/delete/:id", h.HandleDeleteMessage)
 	e.DELETE("/logout", handler.HandleLogout)
 	err = e.Start(":8080")
