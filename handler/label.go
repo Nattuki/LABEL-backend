@@ -16,7 +16,7 @@ type Label struct {
 	MessageId   string    `json:"messageId" db:"message_id"`
 	Content     string    `json:"content" db:"content"`
 	CreatorName string    `json:"creatorName" db:"creator_name"`
-	CreatedOn   time.Time `json:"createdOn" db:"createdOn"`
+	CreatedOn   time.Time `json:"createdOn" db:"created_on"`
 }
 
 func (h *dbHandler) HandleSendLabel(c echo.Context) error {
@@ -52,4 +52,28 @@ func (h *dbHandler) HandleSendLabel(c echo.Context) error {
 
 	log.Println(*label)
 	return c.NoContent(http.StatusOK)
+}
+
+func (h *dbHandler) HandleGetLabel(c echo.Context) error {
+	messageId := c.Param("messageid")
+
+	var label Label
+	var labels []Label
+
+	rows, err := h.db.Queryx("SELECT * From labels WHERE message_id = ? ORDER BY created_on DESC", messageId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to get labels from the database")
+	}
+
+	for rows.Next() {
+		err = rows.StructScan(&label)
+		if err != nil {
+			log.Println(err)
+			return c.String(http.StatusInternalServerError, "failed to scan the next row")
+		}
+		labels = append(labels, label)
+	}
+
+	return c.JSON(http.StatusOK, labels)
 }

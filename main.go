@@ -69,6 +69,7 @@ func main() {
 	e.GET("/gettoken", handler.HandleGetToken)
 	e.GET("/message/get/:page", h.HandleGetMessage)
 	e.GET("/message/countPages", h.HandleCountPages)
+	e.GET("/label/get/:messageid", h.HandleGetLabel)
 	e.POST("/message/send", h.HandleSendMessage)
 	e.POST("/label/send", h.HandleSendLabel)
 	e.DELETE("/message/delete/:id", h.HandleDeleteMessage)

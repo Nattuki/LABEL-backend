@@ -73,7 +73,7 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 	}
 
 	for rows.Next() {
-		err := rows.StructScan(&message)
+		err = rows.StructScan(&message)
 		if err != nil {
 			log.Println(err)
 			return c.String(http.StatusInternalServerError, "failed to scan the next row")
