@@ -39,6 +39,8 @@ func (h *dbHandler) HandleSendLabel(c echo.Context) error {
 	label.LabelId = "label" + xid.New().String()
 	label.CreatedOn = time.Now()
 
+	log.Println(*label)
+
 	_, err = h.db.Exec("INSERT INTO labels (label_id, message_id, content, jump_time, creator_name, created_on) VALUES (?, ?, ?, ?, ?, ?)",
 		label.LabelId,
 		label.MessageId,
@@ -52,7 +54,6 @@ func (h *dbHandler) HandleSendLabel(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "failed to insert into the database")
 	}
 
-	log.Println(*label)
 	return c.NoContent(http.StatusOK)
 }
 
