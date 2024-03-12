@@ -122,7 +122,6 @@ func HandleGetToken(c echo.Context) error {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "Failed to get the token.")
 	}
-	log.Println(token.AccessToken)
 	sess.Values["access_token"] = token.AccessToken
 	sess.Values["token_type"] = token.TokenType
 	sess.Values["expires_in"] = token.ExpiresIn

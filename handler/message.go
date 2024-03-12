@@ -62,6 +62,10 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 		return c.String(http.StatusNotFound, "invalid path parameter")
 	}
 
+	name := c.QueryParam("name")
+	log.Println("name: ")
+	log.Println(name)
+
 	var message Message
 	var messages []Message
 	var messagesToSend []Message
