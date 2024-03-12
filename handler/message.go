@@ -116,7 +116,7 @@ func (h *dbHandler) HandleCountPages(c echo.Context) error {
 	if name == "" {
 		err = h.db.Get(&res.Count, "SELECT COUNT(message_id) FROM messages")
 	} else {
-		h.db.Get(&res.Count, "SELECT COUNT(message_id) FROM messages WHERE name = ?", name)
+		h.db.Get(&res.Count, "SELECT COUNT(*) FROM messages WHERE creator_name = '?'", name)
 	}
 	if err != nil {
 		log.Println(err)
