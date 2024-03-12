@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/xid"
@@ -63,14 +64,17 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 	}
 
 	name := c.QueryParam("name")
-	log.Println("name: ")
-	log.Println(name)
 
 	var message Message
 	var messages []Message
 	var messagesToSend []Message
+	var rows *sqlx.Rows
 
-	rows, err := h.db.Queryx("SELECT * From messages ORDER BY created_on DESC")
+	if name == "" {
+		rows, err = h.db.Queryx("SELECT * From messages ORDER BY created_on DESC")
+	} else {
+		rows, err = h.db.Queryx("SELECT * From messages WHERE creator_name = ? ORDER BY created_on DESC", name)
+	}
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "failed to get messages from the database")
@@ -103,14 +107,22 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 }
 
 func (h *dbHandler) HandleCountPages(c echo.Context) error {
+	name := c.QueryParam("name")
 	res := struct {
 		Count int `json:"count"`
 	}{0}
-	err := h.db.Get(&res.Count, "SELECT COUNT(message_id) FROM messages")
+
+	var err error
+	if name == "" {
+		err = h.db.Get(&res.Count, "SELECT COUNT(message_id) FROM messages")
+	} else {
+		h.db.Get(&res.Count, "SELECT COUNT(message_id) FROM messages WHERE name = ?", name)
+	}
 	if err != nil {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, "failed to connect with the database")
 	}
+
 	res.Count = (res.Count-1)/10 + 1
 	return c.JSON(http.StatusOK, res)
 }
