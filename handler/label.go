@@ -15,6 +15,7 @@ type Label struct {
 	LabelId     string    `json:"labelId" db:"label_id"`
 	MessageId   string    `json:"messageId" db:"message_id"`
 	Content     string    `json:"content" db:"content"`
+	LabelColor  string    `json:"labelColor" db:"label_color"`
 	JumpTime    int       `json:"jumpTime" db:"jump_time"`
 	CreatorName string    `json:"creatorName" db:"creator_name"`
 	CreatedOn   time.Time `json:"createdOn" db:"created_on"`
@@ -41,10 +42,11 @@ func (h *dbHandler) HandleSendLabel(c echo.Context) error {
 
 	log.Println(*label)
 
-	_, err = h.db.Exec("INSERT INTO labels (label_id, message_id, content, jump_time, creator_name, created_on) VALUES (?, ?, ?, ?, ?, ?)",
+	_, err = h.db.Exec("INSERT INTO labels (label_id, message_id, content, label_color, jump_time, creator_name, created_on) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		label.LabelId,
 		label.MessageId,
 		label.Content,
+		label.LabelColor,
 		label.JumpTime,
 		label.CreatorName,
 		label.CreatedOn,
