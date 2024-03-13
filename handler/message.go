@@ -65,10 +65,8 @@ func (h *dbHandler) HandleGetMessage(c echo.Context) error {
 	err := h.db.Get(&message, "SELECT * From messages WHERE message_id = ?", messageId)
 	if err != nil {
 		log.Println(err)
-		return c.String(http.StatusInternalServerError, "failed to get messages from the database")
+		return c.String(http.StatusInternalServerError, "failed to get the message from the database")
 	}
-
-	log.Println(message)
 
 	return c.JSON(http.StatusOK, message)
 }
