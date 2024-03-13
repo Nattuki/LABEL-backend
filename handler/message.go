@@ -58,6 +58,22 @@ func (h *dbHandler) HandleSendMessage(c echo.Context) error {
 }
 
 func (h *dbHandler) HandleGetMessage(c echo.Context) error {
+	messageId := c.Param("messageid")
+
+	var message Message
+
+	err := h.db.Get(&message, "SELECT * From messages WHERE message_id = ?", messageId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to get messages from the database")
+	}
+
+	log.Println(message)
+
+	return c.JSON(http.StatusOK, message)
+}
+
+func (h *dbHandler) HandleGetMessages(c echo.Context) error {
 	page, err := strconv.Atoi(c.Param("page"))
 	if err != nil {
 		return c.String(http.StatusNotFound, "invalid path parameter")
