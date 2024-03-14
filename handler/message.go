@@ -58,7 +58,7 @@ func (h *dbHandler) HandleSendMessage(c echo.Context) error {
 }
 
 func (h *dbHandler) HandleGetMessage(c echo.Context) error {
-	messageId := c.Param("messageid")
+	messageId := c.Param("id")
 
 	var message Message
 
