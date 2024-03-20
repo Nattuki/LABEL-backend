@@ -19,6 +19,7 @@ type Message struct {
 	Title       string    `json:"title" db:"title"`
 	Comment     string    `json:"comment" db:"comment"`
 	Url         string    `json:"url" db:"url"`
+	UrlType     string    `json:"urlType" db:"url_type"`
 	CreatedOn   time.Time `json:"createdOn" db:"created_on"`
 }
 
@@ -41,12 +42,13 @@ func (h *dbHandler) HandleSendMessage(c echo.Context) error {
 	message.MessageId = "msg" + xid.New().String()
 	message.CreatedOn = time.Now()
 
-	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, comment, url, created_on) VALUES (?, ?, ?, ?, ?, ?)",
+	_, err = h.db.Exec("INSERT INTO messages (message_id, creator_name, title, comment, url, url_type, created_on) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		message.MessageId,
 		message.CreatorName,
 		message.Title,
 		message.Comment,
 		message.Url,
+		message.UrlType,
 		message.CreatedOn,
 	)
 	if err != nil {
