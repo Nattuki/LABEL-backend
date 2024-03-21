@@ -82,7 +82,7 @@ func main() {
 	e.GET("/message/get/:page", h.HandleGetMessages)
 	e.GET("/message/countPages", h.HandleCountPages)
 	e.GET("/label/get/:messageid", h.HandleGetLabel)
-	e.GET("/message/share/:messageid", h.HandleMessageOGP)
+	e.GET("/message/share/:id", h.HandleMessageOGP)
 	e.POST("/message/send", h.HandleSendMessage)
 	e.POST("/label/send", h.HandleSendLabel)
 	e.DELETE("/message/:id", h.HandleDeleteMessage)
