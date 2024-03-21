@@ -19,6 +19,31 @@ type Template struct {
 	templates *template.Template
 }
 
+var (
+	tpl = `<!DOCTYPE html">
+	<html>
+	<head>
+	<title>転送</title>
+	<meta http-equiv="refresh" content="3;url=https://jurassic-design.com/web/redirect-sample-code/">
+	</head>
+	
+	<body>
+	
+	<p>〇〇〇〇のホームページは移転しました。</p>
+	<p>新しいホームページは、<a href="https://jurassic-design.com/web/redirect-sample-code/">https://jurassic-design.com/web/redirect-sample-code/</a>になります。
+	</p>
+	
+	<p>
+	お手数をおかけしますが、「お気に入り」の変更をお願いします。
+	なお、このページは、3秒後に、新しいホームページに自動転送されます。
+	</p>
+	
+	</body>
+	
+	</html>
+	`
+)
+
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
@@ -70,7 +95,6 @@ func main() {
 
 	h := handler.NewHandler(db)
 
-	tpl := `<p>Hello!!!</p>`
 	t := &Template{
 		templates: template.Must(template.New("hello").Parse(tpl)),
 	}
