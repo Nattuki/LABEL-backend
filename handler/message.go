@@ -10,6 +10,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/otiai10/opengraph/v2"
 	"github.com/rs/xid"
 )
 
@@ -21,6 +22,13 @@ type Message struct {
 	Url         string    `json:"url" db:"url"`
 	UrlType     string    `json:"urlType" db:"url_type"`
 	CreatedOn   time.Time `json:"createdOn" db:"created_on"`
+}
+
+type OGPContent struct {
+	Title    string
+	Comment  string
+	Url      string
+	ImageUrl string
 }
 
 func (h *dbHandler) HandleSendMessage(c echo.Context) error {
@@ -180,6 +188,31 @@ func (h *dbHandler) HandleDeleteMessage(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func (h *dbHandler) HandleRenderMessage(c echo.Context) error {
-	return c.Render(http.StatusOK, "hello", nil)
+func (h *dbHandler) HandleMessageOGP(c echo.Context) error {
+	messageId := c.Param("id")
+
+	var message Message
+
+	err := h.db.Get(&message, "SELECT * From messages WHERE message_id = ?", messageId)
+	if err != nil {
+		log.Println(err)
+		return c.String(http.StatusInternalServerError, "failed to get the message from the database")
+	}
+
+	ogp := OGPContent{
+		Title:    message.Title,
+		Comment:  message.Comment,
+		Url:      message.Url,
+		ImageUrl: GetOGPImage(message.Url),
+	}
+
+	return c.Render(http.StatusOK, "ogpPage", ogp)
+}
+
+func GetOGPImage(url string) string {
+	ogp, err := opengraph.Fetch(url)
+	if err != nil {
+		log.Println(err)
+	}
+	return ogp.Image[0].URL
 }

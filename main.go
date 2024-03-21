@@ -19,37 +19,6 @@ type Template struct {
 	templates *template.Template
 }
 
-var (
-	tpl = `<!DOCTYPE html">
-	<html>
-	<head prefix="og:http://ogp.me/ns#">
-	<title>転送</title>
-	<meta http-equiv="refresh" content="3;url=https://jurassic-design.com/web/redirect-sample-code/">
-	<meta property="og:url" content="https://label.trap.show/api" />
-	<meta property="og:type" content="article" />
-	<meta property="og:title" content="リダイレクトページだよ" />
-	<meta property="og:description" content="テストテストテスト" />
-	<meta property="og:site_name" content="LABEL" />
-	<meta property="og:image" content="https://jurassic-design.com/wp-content/uploads/redirect-sample-code-tittle.jpg" />
-	</head>
-	
-	<body>
-	
-	<p>〇〇〇〇のホームページは移転しました。</p>
-	<p>新しいホームページは、<a href="https://jurassic-design.com/web/redirect-sample-code/">https://jurassic-design.com/web/redirect-sample-code/</a>になります。
-	</p>
-	
-	<p>
-	お手数をおかけしますが、「お気に入り」の変更をお願いします。
-	なお、このページは、3秒後に、新しいホームページに自動転送されます。
-	</p>
-	
-	</body>
-	
-	</html>
-	`
-)
-
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
@@ -102,11 +71,10 @@ func main() {
 	h := handler.NewHandler(db)
 
 	t := &Template{
-		templates: template.Must(template.New("hello").Parse(tpl)),
+		templates: template.Must(template.New("ogpPage").Parse(tpl)),
 	}
 	e.Renderer = t
 
-	e.GET("/", h.HandleRenderMessage)
 	e.GET("/me", handler.HandleGetMe)
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)
@@ -114,6 +82,7 @@ func main() {
 	e.GET("/message/get/:page", h.HandleGetMessages)
 	e.GET("/message/countPages", h.HandleCountPages)
 	e.GET("/label/get/:messageid", h.HandleGetLabel)
+	e.GET("/message/share/:messageid", h.HandleMessageOGP)
 	e.POST("/message/send", h.HandleSendMessage)
 	e.POST("/label/send", h.HandleSendLabel)
 	e.DELETE("/message/:id", h.HandleDeleteMessage)
@@ -124,3 +93,21 @@ func main() {
 		log.Fatal(err)
 	}
 }
+
+var tpl = `<!DOCTYPE html">
+<html>
+  <head prefix="og:http://ogp.me/ns#">
+	<title>転送</title>
+	<meta http-equiv="refresh" content="3;url={{ .Url }}">
+	<meta property="og:url" content="{{ .Url }}" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="{{ .Title }}" />
+	<meta property="og:description" content="{{ .Comment }}" />
+	<meta property="og:site_name" content="LABEL" />
+	<meta property="og:image" content="{{ .ImageUrl }}" />
+  </head>
+  <body>
+	redirect page for ogp
+  </body>
+</html>
+`
