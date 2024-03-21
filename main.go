@@ -70,8 +70,9 @@ func main() {
 
 	h := handler.NewHandler(db)
 
+	tpl := `<p>Hello!!!</p>`
 	t := &Template{
-		templates: template.Must(template.ParseGlob("public/views/*.html")),
+		templates: template.Must(template.New("hello").Parse(tpl)),
 	}
 	e.Renderer = t
 
