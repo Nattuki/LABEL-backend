@@ -2,10 +2,10 @@ package main
 
 import (
 	handler "LABEL-backend/handler"
+	"html/template"
 	"io"
 	"log"
 	"os"
-	"text/template"
 	"time"
 
 	"github.com/go-sql-driver/mysql"
