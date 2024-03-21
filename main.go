@@ -97,8 +97,8 @@ func main() {
 var tpl = `<!DOCTYPE html">
 <html>
   <head prefix="og:http://ogp.me/ns#">
-	<title>転送</title>
-	<meta http-equiv="refresh" content="3;url={{ .Url }}">
+	<title>LABEL</title>
+	<meta http-equiv="refresh" content="0;url={{ .RedirectUrl }}">
 	<meta property="og:url" content="{{ .Url }}" />
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content="{{ .Title }}" />

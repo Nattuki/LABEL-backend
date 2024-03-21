@@ -25,10 +25,11 @@ type Message struct {
 }
 
 type OGPContent struct {
-	Title    string
-	Comment  string
-	Url      string
-	ImageUrl string
+	Title       string
+	Comment     string
+	Url         string
+	RedirectUrl string
+	ImageUrl    string
 }
 
 func (h *dbHandler) HandleSendMessage(c echo.Context) error {
@@ -200,10 +201,11 @@ func (h *dbHandler) HandleMessageOGP(c echo.Context) error {
 	}
 
 	ogp := OGPContent{
-		Title:    message.Title,
-		Comment:  message.Comment,
-		Url:      message.Url,
-		ImageUrl: GetOGPImage(message.Url),
+		Title:       message.Title,
+		Comment:     message.Comment,
+		Url:         message.Url,
+		RedirectUrl: "https://label.trap.show/message/" + messageId,
+		ImageUrl:    GetOGPImage(message.Url),
 	}
 
 	return c.Render(http.StatusOK, "ogpPage", ogp)
