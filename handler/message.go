@@ -216,6 +216,5 @@ func GetOGPImage(url string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println(ogp)
 	return ogp.Image[0].URL
 }

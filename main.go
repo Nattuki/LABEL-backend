@@ -99,7 +99,7 @@ var tpl = `<!DOCTYPE html">
   <head prefix="og:http://ogp.me/ns#">
 	<title>LABEL</title>
 	<meta http-equiv="refresh" content="0;url={{ .RedirectUrl }}">
-	<meta property="og:url" content="{{ .Url }}" />
+	<meta property="og:url" content="{{ .RedirectUrl }}" />
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content="{{ .Title }}" />
 	<meta property="og:description" content="{{ .Comment }}" />
