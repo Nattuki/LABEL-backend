@@ -71,7 +71,7 @@ func main() {
 	h := handler.NewHandler(db)
 
 	t := &Template{
-		templates: template.Must(template.ParseGlob("views/hello.html")),
+		templates: template.Must(template.ParseGlob("/Users/natsuki/Documents/workspace/LABEL-backend/views/hello.html")),
 	}
 	e.Renderer = t
 
