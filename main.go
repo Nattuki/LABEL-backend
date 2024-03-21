@@ -2,9 +2,10 @@ package main
 
 import (
 	handler "LABEL-backend/handler"
+	"io"
 	"log"
-	"net/http"
 	"os"
+	"text/template"
 	"time"
 
 	"github.com/go-sql-driver/mysql"
@@ -13,6 +14,14 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/srinathgs/mysqlstore"
 )
+
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
 
 func init() {
 	handler.ClientID = os.Getenv("TRAQ_CLIENT_ID")
@@ -59,11 +68,14 @@ func main() {
 	e := echo.New()
 	e.Use(session.Middleware(store))
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello!\n")
-	})
 	h := handler.NewHandler(db)
 
+	t := &Template{
+		templates: template.Must(template.ParseGlob("views/*html")),
+	}
+	e.Renderer = t
+
+	e.GET("/", h.HandleRenderMessage)
 	e.GET("/me", handler.HandleGetMe)
 	e.GET("/loginpath", handler.HandleGetOAuthUrl)
 	e.GET("/gettoken", handler.HandleGetToken)

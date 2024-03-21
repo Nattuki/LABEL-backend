@@ -179,3 +179,7 @@ func (h *dbHandler) HandleDeleteMessage(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+func (h *dbHandler) HandleRenderMessage(c echo.Context) error {
+	return c.Render(http.StatusOK, "hello", nil)
+}
