@@ -22,9 +22,15 @@ type Template struct {
 var (
 	tpl = `<!DOCTYPE html">
 	<html>
-	<head>
+	<head prefix="og:http://ogp.me/ns#">
 	<title>転送</title>
 	<meta http-equiv="refresh" content="3;url=https://jurassic-design.com/web/redirect-sample-code/">
+	<meta property="og:url" content="https://label.trap.show/api" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="リダイレクトページだよ" />
+	<meta property="og:description" content="テストテストテスト" />
+	<meta property="og:site_name" content="LABEL" />
+	<meta property="og:image" content="https://jurassic-design.com/wp-content/uploads/redirect-sample-code-tittle.jpg" />
 	</head>
 	
 	<body>
