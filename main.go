@@ -106,8 +106,6 @@ var tpl = `<!DOCTYPE html">
 	<meta property="og:site_name" content="LABEL" />
 	<meta property="og:image" content="{{ .ImageUrl }}" />
   </head>
-  <body>
-	redirect page for ogp
-  </body>
+  <body></body>
 </html>
 `
