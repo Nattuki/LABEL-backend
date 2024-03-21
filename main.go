@@ -71,7 +71,7 @@ func main() {
 	h := handler.NewHandler(db)
 
 	t := &Template{
-		templates: template.Must(template.ParseGlob("views/*.html")),
+		templates: template.Must(template.ParseGlob("public/views/*.html")),
 	}
 	e.Renderer = t
 
